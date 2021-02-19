@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd" version="2.0">
+
+    <entity class="br.com.cod3r.hexagonal.core.entities.User" 
+        access="FIELD">
+        <table name="users" />
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY" />
+            </id>
+            <basic name="name">
+                <column name="name" length="255" nullable="false" />
+            </basic>
+            <basic name="email">
+                <column name="email" length="255" nullable="false" />
+            </basic>
+            <basic name="password">
+                <column name="password" length="255" nullable="false" />
+            </basic>
+        </attributes>
+    </entity>
+
+</entity-mappings>
