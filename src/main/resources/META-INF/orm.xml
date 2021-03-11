@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd" version="2.0">
 
-    <entity class="br.com.cod3r.hexagonal.core.entities.User" 
+    <entity class="br.com.cod3r.hexagonal.domain.entities.User" 
         access="FIELD">
         <table name="users" />
         <attributes>
@@ -11,13 +11,38 @@
             <basic name="name">
                 <column name="name" length="255" nullable="false" />
             </basic>
-            <basic name="email">
-                <column name="email" length="255" nullable="false" />
-            </basic>
-            <basic name="password">
-                <column name="password" length="255" nullable="false" />
-            </basic>
+            <embedded name="email"></embedded>
+            <embedded name="password"></embedded>
         </attributes>
     </entity>
+
+    <embeddable class="br.com.cod3r.hexagonal.domain.valueobjects.Name">
+        <attributes>
+            <basic name="value">
+                <column name="name" length="255" nullable="false" />
+            </basic>
+            <transient name="minSize" />
+            <transient name="maxSize" />
+            <transient name="minNumberOfWords" />
+            <transient name="maxNumberOfWords" />
+        </attributes>
+    </embeddable>    
+
+    <embeddable class="br.com.cod3r.hexagonal.domain.valueobjects.Email">
+        <attributes>
+            <basic name="value">
+                <column name="email" length="255" nullable="false" />
+            </basic>
+        </attributes>
+    </embeddable>    
+
+    <embeddable class="br.com.cod3r.hexagonal.domain.valueobjects.Password">
+        <attributes>
+            <basic name="encoded">
+                <column name="password" length="255" nullable="false" />
+            </basic>
+            <transient name="raw" />
+        </attributes>
+    </embeddable>    
 
 </entity-mappings>

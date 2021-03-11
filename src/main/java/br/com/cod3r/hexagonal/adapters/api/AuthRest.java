@@ -9,31 +9,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cod3r.hexagonal.adapters.dto.LoginSession;
-import br.com.cod3r.hexagonal.core.entities.User;
-import br.com.cod3r.hexagonal.core.exceptions.AuthException;
-import br.com.cod3r.hexagonal.core.ports.PasswordVerifier;
-import br.com.cod3r.hexagonal.core.ports.UserByEmailRepository;
-import br.com.cod3r.hexagonal.core.usecases.Login;
+import br.com.cod3r.hexagonal.adapters.dto.UserDTO;
+import br.com.cod3r.hexagonal.domain.entities.User;
+import br.com.cod3r.hexagonal.domain.exceptions.EmailNotFoundException;
+import br.com.cod3r.hexagonal.domain.exceptions.WrongPasswordException;
+import br.com.cod3r.hexagonal.domain.ports.UserRepository;
+import br.com.cod3r.hexagonal.domain.services.Login;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthRest {
 
     @Autowired
-    private UserByEmailRepository findRepo;
-
-    @Autowired
-    private PasswordVerifier passwordVerifier;
+    private UserRepository userRepo;
 
     @PostMapping(path = "login")
-    public LoginSession login(String email, String password) {
-        Login login = new Login(findRepo, passwordVerifier);
-        User user = login.execute(email, password);
+    public LoginSession login(UserDTO userDTO) {
+        Login login = new Login(userRepo);
+        User user = login.execute(userDTO.toUser());
         return new LoginSession(user, "fake token...:)");
     }
 
-    @ExceptionHandler(AuthException.class)
-    public ResponseEntity<String> userExist(AuthException e) {
+    @ExceptionHandler({ EmailNotFoundException.class, WrongPasswordException.class })
+    public ResponseEntity<String> wrongEmailAndPassword(RuntimeException e) {
         return new ResponseEntity<String>("Usuário/Senha inválidos", HttpStatus.BAD_REQUEST);
     }
 }

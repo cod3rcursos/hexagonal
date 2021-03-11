@@ -2,7 +2,7 @@ package br.com.cod3r.hexagonal.adapters.dto;
 
 import java.util.Date;
 
-import br.com.cod3r.hexagonal.core.entities.User;
+import br.com.cod3r.hexagonal.domain.entities.User;
 
 public class LoginSession {
 
@@ -10,10 +10,10 @@ public class LoginSession {
     private final String email;
     private final String token;
     private final Date startsAt;
-    
+
     public LoginSession(User user, String token) {
-        this.name = user.getName();
-        this.email = user.getEmail();
+        this.name = user.getName().getValue();
+        this.email = user.getEmail().getValue();
         this.token = token;
         this.startsAt = new Date();
     }
