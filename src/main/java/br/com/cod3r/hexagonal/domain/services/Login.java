@@ -4,6 +4,7 @@ import br.com.cod3r.hexagonal.domain.entities.User;
 import br.com.cod3r.hexagonal.domain.exceptions.EmailNotFoundException;
 import br.com.cod3r.hexagonal.domain.exceptions.WrongPasswordException;
 import br.com.cod3r.hexagonal.domain.ports.UserRepository;
+import br.com.cod3r.hexagonal.domain.valueobjects.Email;
 import br.com.cod3r.hexagonal.domain.valueobjects.Password;
 
 public class Login {
@@ -14,16 +15,15 @@ public class Login {
         this.userRepo = userRepo;
     }
 
-    public User execute(User user) {
-        User userFromDB = userRepo.findByEmail(user.getEmail());
+    public User execute(Email email, Password password) {
+        User userFromDB = userRepo.findByEmail(email);
         if (userFromDB == null) {
             throw new EmailNotFoundException();
         }
 
-        Password informed = user.getPassword();
         Password expected = userFromDB.getPassword();
 
-        if(!informed.same(expected)) {
+        if (!expected.same(password)) {
             throw new WrongPasswordException();
         }
 
